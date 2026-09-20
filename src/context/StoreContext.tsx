@@ -14,6 +14,7 @@ export interface PublicSettings {
   storeName: string;
   logoUrl: string;
   whatsappNumber: string;
+  backgroundTheme?: string;
 }
 
 interface StoreContextType {
@@ -35,6 +36,7 @@ const defaultSettings: PublicSettings = {
   storeName: 'Cris Variedades',
   logoUrl: '',
   whatsappNumber: '5511999999999',
+  backgroundTheme: 'padrao',
 };
 
 const CACHE_KEY = 'cris_cache';
