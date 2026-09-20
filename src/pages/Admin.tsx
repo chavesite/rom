@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Trash2, Save, Image as ImageIcon, LogOut, Settings2, Package, Pencil, Upload, X } from 'lucide-react';
+import { Plus, Trash2, Save, Image as ImageIcon, LogOut, Settings2, Package, Pencil, Upload, X, Palette, Check } from 'lucide-react';
+import { BACKGROUND_THEMES, DEFAULT_THEME_ID } from '../themes';
 import { useStore, Product } from '../context/StoreContext';
 
 const MAX_UPLOAD_MB = 2;
@@ -37,8 +38,10 @@ export const Admin = () => {
   const [logoUrl, setLogoUrl] = useState(settings.logoUrl);
   const [whatsappNumber, setWhatsappNumber] = useState(settings.whatsappNumber);
   const [adminPassword, setAdminPassword] = useState('');
+  const [backgroundTheme, setBackgroundTheme] = useState(settings.backgroundTheme || DEFAULT_THEME_ID);
 
   useEffect(() => {
+    setBackgroundTheme(settings.backgroundTheme || DEFAULT_THEME_ID);
     setStoreName(settings.storeName);
     setLogoUrl(settings.logoUrl);
     setWhatsappNumber(settings.whatsappNumber);
@@ -76,6 +79,12 @@ export const Admin = () => {
     e.preventDefault();
     const ok = await updateSettings({ storeName, logoUrl, whatsappNumber, adminPassword });
     alert(ok ? 'Configurações salvas com sucesso!' : 'Não foi possível salvar. Tente novamente.');
+  };
+
+  // Salva somente o tema (não envia senha, então a senha atual não é alterada)
+  const handleSaveTheme = async () => {
+    const ok = await updateSettings({ backgroundTheme });
+    alert(ok ? 'Tema salvo com sucesso!' : 'Não foi possível salvar o tema. Tente novamente.');
   };
 
   const openAddForm = () => {
@@ -276,6 +285,46 @@ export const Admin = () => {
             </button>
           </div>
         </form>
+      </section>
+
+      <section className="bg-white p-6 sm:p-8 rounded-[2rem] shadow-sm border border-gray-100">
+        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <Palette className="w-5 h-5 text-gray-400" />
+          Tema de Cor de Fundo
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {BACKGROUND_THEMES.map((theme) => {
+            const selected = backgroundTheme === theme.id;
+            return (
+              <button
+                key={theme.id}
+                type="button"
+                onClick={() => setBackgroundTheme(theme.id)}
+                className={`flex items-center gap-3 p-3 rounded-2xl border-2 text-left transition-all ${
+                  selected ? 'border-pink-500 bg-pink-50/40' : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <span
+                  className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: theme.color }}
+                >
+                  {selected && <Check className="w-4 h-4 text-pink-600" />}
+                </span>
+                <span className="text-sm font-medium text-gray-700">{theme.name}</span>
+              </button>
+            );
+          })}
+        </div>
+        <div className="pt-6">
+          <button
+            type="button"
+            onClick={handleSaveTheme}
+            className="flex items-center justify-center sm:justify-start gap-2 bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-xl font-medium transition-all shadow-sm active:scale-[0.98] w-full sm:w-auto"
+          >
+            <Save className="w-4 h-4" />
+            Salvar Tema
+          </button>
+        </div>
       </section>
 
       <section>
