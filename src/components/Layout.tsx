@@ -3,12 +3,16 @@ import { Outlet, Link } from 'react-router-dom';
 import { Store, Lock } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { PWAInstallButton } from './PWAInstallButton';
+import { getThemeColor } from '../themes';
 
 export const Layout = () => {
   const { settings } = useStore();
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
+    <div
+      className="min-h-screen bg-gray-50 flex flex-col font-sans"
+      style={{ backgroundColor: getThemeColor(settings.backgroundTheme) }}
+    >
       <header className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
